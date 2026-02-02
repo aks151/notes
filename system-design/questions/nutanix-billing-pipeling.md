@@ -1,5 +1,7 @@
 "Design a processing pipeline system for a cloud provider's billing system. This system should take metrics from various clients using the cloud system, process it, store it and pass it further for the data to be used in billing."
 
+## Solution 1
+
 This is a classic "Data-Intensive System Design" question. It tests your ability to handle high throughput, strict accuracy requirements (because money is involved), and complex state management.
 
 Many candidates fail this not because they can't draw boxes, but because they treat it like a generic logging system. **Billing systems require "Exactly-Once" processing semantics and auditability**, which makes them fundamentally different from a standard metrics dashboard.
@@ -157,7 +159,7 @@ If you get this question again, organize your answer like this:
 
 
 
-## second
+## Solution 2
 
 The image contains the following text:
 
