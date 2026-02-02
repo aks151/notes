@@ -33,7 +33,9 @@
   - "How do you handle millions of concurrent reads for the same cached data?"
        - Request Coalescing
        - Cache Key Fanout
-  - "What happens when multiple requests try to rebuild an expired cache entry simultaneously?"
+  - "What happens when multiple requests try to rebuild an expired cache entry simultaneously?" (Cache Stampede)
+        - Distributed Locks
+        - Probabilistic Early Refresh
   - "How do you handle cache invalidation when data updates need to be immediately visible?"
       lots of talks here around nuances of various scenarios, cache versioning works well for single-entity caches like user profiles or product details, doesnt helps much with computed data like search results or feeds where invalidation is inherently more complex
 
@@ -41,4 +43,7 @@
  ## Summary
  - optimize within your database first with proper indexing and denormalization, then scale horizontally with read replicas, and finally add caching layers for ultimate performance. 
  - demonstrate that you understand both the performance benefits and the operational complexity of each approach
+
+ ## Notes
+ 1. 01.02.26 - missed Denormalization Strategies for Optimizing Read Performance, Read Replicas for horizontal scaling, 
 
