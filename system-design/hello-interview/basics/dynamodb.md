@@ -1,0 +1,11 @@
+# DynamoDB
+- key-value db
+- AWS provided
+- large scale
+- has tables and has non strict rows
+- partition key + sort key
+- GSI, LSI (secondary indexes)
+- tunable consistency
+- highly available mode - BASE
+- highly consistent mode - ACID compliant
+- Scalability - using auto sharding and load balancing
