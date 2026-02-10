@@ -1,2 +1,4 @@
 # IMP Points
 - user information will be passed in the headers (either via session token or JWT). This is a common pattern for APIs and is a good way to ensure that the user is authenticated and authorized to perform the action while preserving security. You should avoid passing user information in the request body, as this can be easily manipulated by the client
+- Take care to implement pagination, then based on the situation think about which sort of pagination is required(offset based generally and if high data volume scenarios or real time data is mentioned). it matters more that pagination is included in the first place than what type of pagination
+- Any time we can tolerate stale data and we have duplicate requests coming through, we should consider whether caching is appropriate.
