@@ -163,6 +163,32 @@
     - When a threshold is violated in the stream, Flink immediately emits an alert event to the notification service.
 - **Benefit:** Reduces latency to seconds (basically the time it takes to traverse the Kafka pipeline) and removes the evaluation load from the storage layer.
 
+### 3. Ensure High Availability (HA) during spikes and failures
+**Goal:** Building resilience across both ingestion and alerting paths to ensure no data loss and timely notifications.
+
+#### Redundancy and Durable Buffers
+- **Eliminate Single Points of Failure:** Avoid single instances for Kafka, DBs, or ingestion services.
+- **Redundancy at Each Stage:**
+    - **Ingestion:** Multiple instances of the ingestion service behind a load balancer.
+    - **Kafka:** Replicated partitions with leader election and In-Sync Replicas (ISR) to ensure durability.
+    - **Storage:** Use a TSDB with replication and multi-node write capabilities.
+    - **Alerting:** Multiple Flink consumers in a single consumer group for parallel processing and failover.
+- **Buffering:** If the DB slows down, Kafka absorbs the spike. If a consumer fails, another picks up its partition. If a notification provider is down, the alert service retries until recovery.
+
+#### End-to-End HA Strategies
+- **Ingestion Path:**
+    - **Agent Buffering:** Agents buffer locally and retry if the network or ingestion layer is down.
+    - **Cross-Zone Replication:** Kafka brokers replicated across availability zones.
+    - **Idempotency:** Use idempotent writes so that retries (e.g., from agents or ingestion consumers) don't create duplicate data points.
+- **Alerting & Notification Path:**
+    - **Checkpointing:** Evaluators (like Flink) use checkpointing to resume exactly where they left off after a crash.
+    - **Persistent Alert Events:** Write alert events to Kafka before attempting external notification.
+    - **Retries & Failover:** The notification service retries deliveries and can fail over to secondary channels (e.g., SMS if Slack is down).
+
+#### The HA Essence: "Degrade Freshness, Not Correctness"
+- When things break, the system should favor durability. Metrics and alerts may arrive late (delayed freshness), but they must still arrive eventually (correctness).
+- **Meta-Monitoring:** Use a "watchdog" service to monitor the monitoring system itself and proactively alert if the monitoring infrastructure is unhealthy.
+
 ---
 ## Study Session History (Feb 22, 2026)
 - **Ingestion Strategy:** Evolved from a simple server-DB push to a decoupled Kafka-based architecture, then further optimized with agent-based local batching/buffering to handle 5M metrics/sec.
@@ -173,3 +199,4 @@
 - **Notification Management:** Integrated a dedicated notification service to handle real-world complexities like deduplication, grouping (alert storms), and state transitions.
 - **Read Optimization Deep Dive:** Compared raw data queries vs. pre-computed rollups and advanced caching/query splitting to achieve sub-second dashboard latency for large time ranges.
 - **Alert Latency Deep Dive:** Explored scaling polling frequency vs. implementing real-time stream processing (Flink) for sub-minute alert triggering.
+- **High Availability Deep Dive:** Established end-to-end HA strategies using redundancy, durable buffering (Kafka), idempotency, and the principle of degrading freshness over correctness.
