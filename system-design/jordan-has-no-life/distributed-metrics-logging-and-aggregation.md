@@ -19,9 +19,9 @@
 
 ## Data Aggregation (Flink Consumer)
 The primary step in the Flink consumer involves windowing strategies:
-- **Tumbling Window**
-- **Hopping Window**
-- **Sliding Window**
+- **Tumbling Window** - Fixed Size window
+- **Hopping Window** - Joins two tumbling window
+- **Sliding Window** - keeps sliding xD 
 *Note: Flink is for processing; data should not be stored there permanently.*
 
 ## Storage Strategies
