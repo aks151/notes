@@ -1,0 +1,2 @@
+18March2026
+1. partitions in kafka
