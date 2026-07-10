@@ -1,0 +1,28 @@
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+# Text Editor / IDE temp & configuration files
+*.swp
+*~
+.idea/
+.vscode/
+# Ignore Obsidian workspace file which changes constantly and causes conflicts
+.obsidian/workspace
+.obsidian/workspace.json
+.obsidian/backups/
+
+# Logs and databases
+*.log
+*.sqlite
+
+# General temp / backup files
+*.bak
+*.tmp
+*.temp
