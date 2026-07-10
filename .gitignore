@@ -8,7 +8,8 @@ ehthumbs.db
 Thumbs.db
 
 
-# Text Editor / IDE temp & configuration files
+
+# Text Editor / IDE temp & configuration 
 *.swp
 *~
 .idea/
