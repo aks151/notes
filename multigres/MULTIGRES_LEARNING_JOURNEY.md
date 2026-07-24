@@ -84,23 +84,36 @@ Client (psql/ORM) ──> pgprotocol Server ──> MultigatewayHandler
 
 ---
 
-### C. Debugging Discoveries Made
-1. **Timezone Offset Parsing:**
-   * *Problem:* `ScanRow` failed with `cannot parse "2026-07-19 07:33:12.191706+05:30" as time.Time`.
-   * *Lesson:* PostgreSQL formats `timestamptz` in the session's local timezone. Layout `2006-01-02 15:04:05.999999-07` expects offsets without colons (`+05`), so offsets with colons (`+05:30`) fail unless `2006-01-02 15:04:05.999999-07:00` is included in the format list.
+### C. Bug Fixes & Code Contributions Completed
+1. **Timezone Offset Parsing Fix in Row Scanner (`result.go` & `result_test.go`):**
+   * *Problem:* `ScanRow` failed with `cannot parse "2026-07-19 07:33:12.191706+05:30" as time.Time` when running unit tests in non-UTC timezones (like IST `+05:30`).
+   * *Root Cause:* Go layout `"2006-01-02 15:04:05.999999-07"` only matches offsets without colons (e.g. `+05`).
+   * *Fix:* Added `"2006-01-02 15:04:05.999999-07:00"` to both `**time.Time` and `*time.Time` switches in `go/services/multipooler/internal/executor/result.go` and added a unit test in `result_test.go`. Verified with `go test` passing 100%!
 2. **`statement_timeout` Parity Testing:**
    * *Problem:* Parity test failed comparing gateway error to direct PostgreSQL 14.
    * *Lesson:* PostgreSQL 17 prints GUC error bounds with units `(0 ms .. 2147483647 ms)`, whereas PostgreSQL 14 prints `(0 .. 2147483647)`.
 
 ---
 
-## 4. Overall Progression & Next Steps
+## 4. Five Exploration Tracks for Mastering Multigres
+
+| Track | Focus Area | Core Files | Industry Skill Gained |
+| :--- | :--- | :--- | :--- |
+| **1. Compiler & Planner** | AST Parsing, Plan Caching, Scatter-Gather Routing | `go/common/parser/`, `go/services/multigateway/planner/` | Database Engine & Query Planner Design |
+| **2. Wire Protocol** | TCP/TLS Handshakes, PG Frontend/Backend Messages, SCRAM | `go/common/pgprotocol/`, `go/services/multigateway/handler/` | Low-Level Network Systems Programming |
+| **3. Concurrency & Memory** | LIFO Pool Stacks, `sync.Pool`, Atomics, GUC Isolation | `go/services/multipooler/internal/pools/`, `internal/executor/` | High-Performance Microsecond Backend Engineering |
+| **4. Distributed Consensus** | `etcd`, Raft Quorums, Failover, Split-Brain Prevention | `go/services/multiorch/`, `go/services/pgctld/`, `go/common/consensus/` | Distributed Systems Architecture & SRE |
+| **5. Control Plane** | CLI Commands, gRPC Services, Topology Schemas, Protobufs | `go/cmd/multigres/`, `go/cmd/multiadmin/`, `proto/` | Cloud-Native Infrastructure & Tooling |
+
+---
+
+## 5. Overall Progression & Next Steps
 
 * [x] **Phase 1: Understanding & Architecture Mental Models** *(Completed for `multigateway` & `multipooler`)*
-* [ ] **Phase 2: First Hands-On Code Contributions** *(Next Step: Pick a `TODO` or unit test to implement)*
-* [ ] **Phase 3: Building a Non-Trivial Feature / Optimization**
+* [x] **Phase 2: First Hands-On Code Bug Fix** *(Completed: Fixed timezone offset parsing in `result.go` & `result_test.go`)*
+* [ ] **Phase 3: Deep Dive into a Chosen Track (1-5)**
 * [ ] **Phase 4: Open Source Portfolio & Senior Backend Interview Readiness**
 
 ---
 
-*Last updated: 2026-07-22 (Saved inside notes repo at `multigres/MULTIGRES_LEARNING_JOURNEY.md`)*
+*Last updated: 2026-07-24 (Saved inside notes repo at `multigres/MULTIGRES_LEARNING_JOURNEY.md`)*
