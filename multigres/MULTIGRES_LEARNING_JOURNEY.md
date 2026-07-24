@@ -101,9 +101,13 @@ Client (psql/ORM) ──> pgprotocol Server ──> MultigatewayHandler
 | :--- | :--- | :--- | :--- |
 | **1. Compiler & Planner** | AST Parsing, Plan Caching, Scatter-Gather Routing | `go/common/parser/`, `go/services/multigateway/planner/` | Database Engine & Query Planner Design |
 | **2. Wire Protocol** | TCP/TLS Handshakes, PG Frontend/Backend Messages, SCRAM | `go/common/pgprotocol/`, `go/services/multigateway/handler/` | Low-Level Network Systems Programming |
-| **3. Concurrency & Memory** | LIFO Pool Stacks, `sync.Pool`, Atomics, GUC Isolation | `go/services/multipooler/internal/pools/`, `internal/executor/` | High-Performance Microsecond Backend Engineering |
+| **3. Concurrency & Memory (ACTIVE FOCUS)** | LIFO Pool Stacks, `sync.Pool`, Atomics, GUC Isolation, Transaction Reservation | `go/services/multipooler/internal/pools/`, `internal/executor/` | High-Performance Microsecond Backend Engineering |
 | **4. Distributed Consensus** | `etcd`, Raft Quorums, Failover, Split-Brain Prevention | `go/services/multiorch/`, `go/services/pgctld/`, `go/common/consensus/` | Distributed Systems Architecture & SRE |
 | **5. Control Plane** | CLI Commands, gRPC Services, Topology Schemas, Protobufs | `go/cmd/multigres/`, `go/cmd/multiadmin/`, `proto/` | Cloud-Native Infrastructure & Tooling |
+
+### Option 3 vs Option 4 Comparison:
+* **Option 3 (`multipooler`):** Single-Node SPEED & MEMORY (Mutexes, atomic operations, connection stacks, transaction reservation).
+* **Option 4 (`multiorch`):** Multi-Node SURVIVAL & FAULT TOLERANCE (`etcd`, consensus quorums, heartbeats, automated leader failover).
 
 ---
 
@@ -111,7 +115,7 @@ Client (psql/ORM) ──> pgprotocol Server ──> MultigatewayHandler
 
 * [x] **Phase 1: Understanding & Architecture Mental Models** *(Completed for `multigateway` & `multipooler`)*
 * [x] **Phase 2: First Hands-On Code Bug Fix** *(Completed: Fixed timezone offset parsing in `result.go` & `result_test.go`)*
-* [ ] **Phase 3: Deep Dive into a Chosen Track (1-5)**
+* [ ] **Phase 3: Deep Dive into Track 3 (Concurrency, Memory & Transactions in `multipooler`)** *(In Progress)*
 * [ ] **Phase 4: Open Source Portfolio & Senior Backend Interview Readiness**
 
 ---
