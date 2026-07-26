@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notes-revision"
+version = "1.0.0"
+description = "Automated Daily Notes Revision CLI & Email System"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "AGY Pair Programmer" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS",
+]
+
+[project.scripts]
+notes-revision = "notes_revision.cli:main"

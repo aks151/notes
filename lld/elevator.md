@@ -13,3 +13,25 @@
 - Door open/close mechanics
 - Dynamic floor/elevator config
 - UI/rendering layer
+
+
+## Entities
+- Floor: just numbers so not an entity
+- Request: just a floor number or a whole class?
+- Elevator: surely a class
+- ElevatorController: Orchestrator surely neede
+
+
+## Classes
+- ElevatorController: receives hall calls, decides which elevator should handle each request, coordinates overall system
+- Elevator: maintains current floor, direction, queue of requests. knows how to execute movement behaviour, move one floor at a time, stop when needed, reverse when there are no more stops ahead, no idea about other elevators
+- Request: represents the stop an elevator needs to make,  will be decided later if it would be a class or not 
+
+
+## Class Designs
+- ```code
+    class ElevatorController
+    -elevators:list<Elevator>
+    +
+
+

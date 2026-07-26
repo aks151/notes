@@ -23,6 +23,7 @@ Thumbs.db
 *.log
 *.sqlite
 
+
 # General temp / backup files
 *.bak
 *.tmp
